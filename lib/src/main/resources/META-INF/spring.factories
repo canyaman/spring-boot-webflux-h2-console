@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+me.yaman.can.webflux.h2console.H2ConsoleAutoConfiguration

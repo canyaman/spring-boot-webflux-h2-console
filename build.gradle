@@ -1,0 +1,19 @@
+plugins{
+    id 'maven-publish'
+    id 'java-library'
+    id 'jacoco'
+}
+
+repositories {
+    mavenCentral()
+}
+
+gradle.includedBuilds.each{
+    test.dependsOn it.task(":test")
+}
+
+gradle.includedBuilds.each{
+    clean.dependsOn it.task(":clean")
+}
+
+publish.dependsOn gradle.includedBuild("lib").task(":publish")

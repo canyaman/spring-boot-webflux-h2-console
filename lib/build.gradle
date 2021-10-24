@@ -1,0 +1,74 @@
+plugins {
+	id 'java-library'
+	id 'maven-publish'
+	id 'org.springframework.boot' version '2.5.6' apply false
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	// Kotlin Language
+	id "org.jetbrains.kotlin.jvm" version '1.5.31'
+	id "org.jetbrains.kotlin.plugin.spring" version '1.5.31'
+	id 'jacoco'
+}
+
+group = 'me.yaman.can'
+version = '0.0.1'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement{
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-autoconfigure'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-actuator'
+	api 'org.springframework:spring-jdbc'
+	api 'com.h2database:h2'
+	api "org.jetbrains.kotlin:kotlin-reflect"
+	api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+	api("com.fasterxml.jackson.module:jackson-module-kotlin")
+	api("io.projectreactor.kotlin:reactor-kotlin-extensions")
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+}
+
+compileKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "11"
+	}
+}
+
+compileTestKotlin {
+	kotlinOptions {
+		freeCompilerArgs = ["-Xjsr305=strict"]
+		jvmTarget = "11"
+	}
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+			groupId = project.group
+			version = project.version
+			artifactId = 'spring-boot-webflux-h2-console'
+		}
+	}
+	repositories {
+		mavenLocal()
+	}
+}

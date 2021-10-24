@@ -1,0 +1,11 @@
+rootProject.name = 'spring-boot-webflux-h2-console'
+
+includeBuild('lib'){
+    dependencySubstitution{
+        substitute module("me.yaman.can:spring-boot-webflux-h2-console:0.0.1") using project(":")
+    }
+}
+include('jdbc-sample','r2dbc-sample')
+project(':jdbc-sample').projectDir = file('samples/jdbc-sample')
+project(':r2dbc-sample').projectDir = file('samples/r2dbc-sample')
+

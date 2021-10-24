@@ -1,0 +1,72 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource",
+      "type": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties",
+      "sourceType": "org.springframework.boot.autoconfigure.jdbc.DataSourceProperties",
+      "description": "To obtain login information and the login session"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spring.h2.console.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "me.yaman.can.webflux.h2console.H2ConsoleAutoconfiguration.Properties",
+      "description": "activate h2-console"
+    },
+    {
+      "name": "spring.h2.console.path",
+      "type": "java.lang.String",
+      "sourceType": "me.yaman.can.webflux.h2console.H2ConsoleAutoconfiguration.Properties",
+      "description": "Redirect web path. Otherwise, actuator /actuator/redirect path can be used if it is enabled by h2console"
+    },
+    {
+      "name": "spring.h2.console.port",
+      "type": "java.lang.Integer",
+      "sourceType": "me.yaman.can.webflux.h2console.H2ConsoleAutoconfiguration.Properties",
+      "description": "h2-console server run port, default is random port",
+      "defaultValue": 0
+    }
+  ],
+  "hints": [
+    {
+      "name": "h2.console.enabled",
+      "values": [
+        {
+          "value": "true",
+          "description": "Enable h2-console service."
+        },
+        {
+          "value": "false",
+          "description": "Disable h2-console service."
+        }
+      ]
+    },
+    {
+      "name": "h2.console.path",
+      "values": [
+        {
+          "value": "/h2-console",
+          "description": "http://localhost:{server.port}/h2-console will redirect to h2-console service"
+        },
+        {
+          "value": "null",
+          "description": "Actuator service only used for redirect"
+        }
+      ]
+    },
+    {
+      "name": "h2.console.port",
+      "values": [
+        {
+          "value": "0",
+          "description": "This is random, available port. Recommended value."
+        },
+        {
+          "value": "8082",
+          "description": "Default h2-console web server port"
+        }
+      ]
+    }
+  ]
+}

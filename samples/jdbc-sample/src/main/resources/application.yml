@@ -1,0 +1,29 @@
+spring:
+  h2.console:
+    # Activate the autoconfiguration
+    enabled: true
+    # Default is /h2-console forward from the path to session created h2 console server uri
+    #path: /h2-console
+    # Optional h2 console port if not set or set 0, available port is given
+    port: 8082
+  # Optional for forward with jdbc session, if not available, you can access with manual configuration
+  datasource:
+    # Even if only r2dbc connection can be used, jdbc url has to be given
+    url: 'jdbc:h2:mem:citydb'
+    driverClassName: org.h2.Driver
+    username: 'sa'
+    password: ''
+# Actuator Service
+management:
+  server.port: 9090
+  endpoint.health:
+    showDetails: never
+  endpoints:
+    web:
+      exposure.include: info, health, h2console
+    health.sensitive: false
+  endpoint:
+    health:
+      group:
+        readiness:
+          include: readinessState, diskSpace, ping
