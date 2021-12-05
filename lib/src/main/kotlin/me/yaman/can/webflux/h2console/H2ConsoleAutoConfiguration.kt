@@ -49,6 +49,7 @@ class H2ConsoleAutoConfiguration(
 
     private var h2ConsoleServer: Server? = null
     private var h2SqlConnection: Connection? = null
+    private var h2TcpServer: Server? = null
 
     val enabled: Boolean
         get() = h2ConsoleProperties?.enabled ?: false
@@ -70,17 +71,23 @@ class H2ConsoleAutoConfiguration(
         get() {
             return h2ConsoleServer?.url
         }
+    val tcpEnabled: Boolean
+        get() = h2ConsoleProperties?.tcpEnabled ?: false
+    val h2ConsoleTcpUrl: String?
+        get() {
+            return h2TcpServer?.url
+        }
 
     @EventListener(ContextRefreshedEvent::class)
     fun start(event: ContextRefreshedEvent) {
-        if (h2ConsoleProperties?.enabled != true) {
+        if (enabled != true) {
             h2ConsoleServer = null
             return
         }
         if (h2ConsoleServer == null) {
             try {
                 h2ConsoleServer =
-                    Server.createWebServer("-web", "-webPort", h2ConsoleProperties.port.toString()).start()
+                    Server.createWebServer("-webPort", h2ConsoleProperties!!.port.toString()).start()
                 log.info("H2 Console started on port {}", h2ConsoleServer?.port)
                 log.info("H2 {}", h2ConsoleServer?.status)
             } catch (e: Exception) {
@@ -90,6 +97,23 @@ class H2ConsoleAutoConfiguration(
             }
         } else {
             log.info("H2 Console is already running on port {}", h2ConsoleServer?.port)
+        }
+
+        if (tcpEnabled) {
+            if (h2TcpServer == null) {
+                try {
+                    h2TcpServer =
+                        Server.createTcpServer("-tcpPort", h2ConsoleProperties!!.tcpPort.toString(), "-tcpAllowOthers").start()
+                    log.info("H2 Console tcp started on port {}", h2TcpServer?.port)
+                    log.info("H2 {}", h2TcpServer?.status)
+                } catch (e: Exception) {
+                    h2TcpServer?.stop()
+                    h2TcpServer = null
+                    log.error("H2 Console tcp did not start {}", e)
+                }
+            } else {
+                log.info("H2 Console tcp is already running on port {}", h2TcpServer?.port)
+            }
         }
     }
 
@@ -103,6 +127,8 @@ class H2ConsoleAutoConfiguration(
         h2SqlConnection = null
         h2ConsoleServer?.stop()
         h2ConsoleServer = null
+        h2TcpServer?.stop()
+        h2TcpServer = null
     }
 
     @GetMapping("/")
@@ -122,8 +148,10 @@ class H2ConsoleAutoConfiguration(
         )
         map["properties"] = h2ConsoleProperties
         map["enabled"] = enabled
+        map["tcpEnabled"] = tcpEnabled
         map["redirectUrl"] = redirectUrl
         map["h2ConsoleUrl"] = h2ConsoleUrl
+        map["h2ConsoleTcpUrl"] = h2ConsoleTcpUrl
 
         try {
             if (h2SqlConnection?.isClosed == true || h2SqlConnection == null) {
@@ -223,7 +251,9 @@ class H2ConsoleAutoConfiguration(
     @ConfigurationProperties("spring.h2.console")
     data class Properties(
         val port: Int = 0,
+        val tcpPort: Int = 0,
         val enabled: Boolean = false,
+        val tcpEnabled: Boolean = false,
         val path: String? = null,
     )
 }
