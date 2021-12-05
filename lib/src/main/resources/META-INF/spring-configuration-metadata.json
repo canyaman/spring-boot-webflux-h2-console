@@ -26,6 +26,19 @@
       "sourceType": "me.yaman.can.webflux.h2console.H2ConsoleAutoconfiguration.Properties",
       "description": "h2-console server run port, default is random port",
       "defaultValue": 0
+    },
+    {
+      "name": "spring.h2.console.tcp-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "me.yaman.can.webflux.h2console.H2ConsoleAutoconfiguration.Properties",
+      "description": "activate h2-console tcp support"
+    },
+    {
+      "name": "spring.h2.console.tcp-port",
+      "type": "java.lang.Integer",
+      "sourceType": "me.yaman.can.webflux.h2console.H2ConsoleAutoconfiguration.Properties",
+      "description": "h2-console tcp server run port, default is random port",
+      "defaultValue": 0
     }
   ],
   "hints": [
@@ -64,6 +77,32 @@
         },
         {
           "value": "8082",
+          "description": "Default h2-console web server port"
+        }
+      ]
+    },
+    {
+      "name": "h2.console.tcp-enabled",
+      "values": [
+        {
+          "value": "true",
+          "description": "Enable h2-console tcp service."
+        },
+        {
+          "value": "false",
+          "description": "Disable h2-console tcp service."
+        }
+      ]
+    },
+    {
+      "name": "h2.console.tcp-port",
+      "values": [
+        {
+          "value": "0",
+          "description": "This is random, available port. Recommended value."
+        },
+        {
+          "value": "9092",
           "description": "Default h2-console web server port"
         }
       ]
